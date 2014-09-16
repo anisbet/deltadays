@@ -2,7 +2,7 @@
 # Makefile for project deltadays 
 # Created: Tue Sep 16 08:48:25 MDT 2014
 #
-#<one line to give the program's name and a brief idea of what it does.>
+# Computes the number of days difference between two ANSI dates.
 #    Copyright (C) 2013  Andrew Nisbet
 #
 # This program is free software; you can redistribute it and/or modify
@@ -31,13 +31,11 @@ USER=sirsi
 REMOTE=~/Unicorn/EPLwork/anisbet/
 LOCAL=~/projects/deltadays/
 APP=deltadays.pl
-ARGS=-x
+ARGS=-a20140915
 
 put: test
 	scp ${LOCAL}${APP} ${USER}@${TEST_SERVER}:${REMOTE}
 	ssh ${USER}@${TEST_SERVER} '${REMOTE}${APP} ${ARGS}'
-get:
-	scp ${USER}@${TEST_SERVER}:${REMOTE}${APP} ${LOCAL}
 test:
 	perl -c ${APP}
 production: test
