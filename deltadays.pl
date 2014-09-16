@@ -129,5 +129,5 @@ if ( defined $opt{'a'} )
 
 print "first date: $firstDate      second date: $secondDate\n" if ( $opt{'d'} );
 printf( "%.0f\n", abs( $secondDate - $firstDate ) / $SECONDS_PER_DAY );
-# print "$result\n";
+
 # EOF
