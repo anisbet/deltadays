@@ -39,7 +39,7 @@ use vars qw/ %opt /;
 use Getopt::Std;
 use Time::Local;
 
-my $VERSION         = qq{0.3};
+my $VERSION         = qq{0.4};
 my $SECONDS_PER_DAY = 60 * 60 * 24;
 #
 # Message about this program and how to use it.
@@ -79,7 +79,7 @@ sub init
     usage() if ( $opt{'x'} );
 	if ( ! defined $opt{'a'} )
 	{
-		print STDERR "**Error: you must provide at least one date in YYYYMMDD format.\n";
+		print STDERR "**Error: you must provide a start date with '-a' in YYYYMMDD format.\n";
 		usage();
 	}
 }
