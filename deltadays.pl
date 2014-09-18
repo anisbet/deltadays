@@ -1,11 +1,11 @@
 #!/usr/bin/perl -w
-####################################################
+#######################################################################
 #
 # Perl source file for project deltadays 
 # Purpose:
 # Method:
 #
-#<one line to give the program's name and a brief idea of what it does.>
+# Returns the number of days between the two argument dates.
 #    Copyright (C) 2013  Andrew Nisbet
 #
 # This program is free software; you can redistribute it and/or modify
@@ -26,11 +26,12 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Sep 16 08:48:25 MDT 2014
 # Rev: 
+#          0.3 - Fixed incorrect usage() information about switches. 
 #          0.2 - Used printf instead of sprintf. 
 #          0.1 - Initial release. 
 #          0.0 - Dev. 
 #
-####################################################
+########################################################################
 
 use strict;
 use warnings;
@@ -38,7 +39,7 @@ use vars qw/ %opt /;
 use Getopt::Std;
 use Time::Local;
 
-my $VERSION         = qq{0.2};
+my $VERSION         = qq{0.3};
 my $SECONDS_PER_DAY = 60 * 60 * 24;
 #
 # Message about this program and how to use it.
@@ -59,9 +60,9 @@ will provide '1' as a result if you asked how many days ago was tomorrow or $0 -
  -x: This (help) message.
 
 example: $0 -x
-example: $0 20140513 20140621
+example: $0 -a 20140513 -b 20140621
   Computes the number of days between May 13, 2014 and June 21, 2014.
-example: $0 20270101
+example: $0 -a"20270101"
   produces a negative date that is the number of days from today to January 1, 2027.
 Version: $VERSION
 EOF

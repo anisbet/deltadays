@@ -4,8 +4,8 @@ Project Notes
 -------------
 
 Instructions for Running:
-deltadays ANSI_DATE [ANSI_DATE]
-deltadays 20140513 [20140621]
+deltadays -a ANSI_DATE [-b ANSI_DATE]
+deltadays.pl -a 20140513 [-b 20140621]
 
 Returns the number of days between the two argument dates. If only one date is provided the alternate 
 date is assumed to be today. The order of the dates is not important.
@@ -17,7 +17,7 @@ Repository Information:
 This product is under version control using Git.
 
 Dependencies:
-None - has no dependancies on the underlying OS libraries.
+None - has no dependancies on the underlying OS or Perl libraries.
 
 Known Issues:
 None
