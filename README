@@ -4,11 +4,18 @@ Project Notes
 -------------
 
 Instructions for Running:
-deltadays -a ANSI_DATE [-b ANSI_DATE]
-deltadays.pl -a 20140513 [-b 20140621]
+	deltadays -a ANSI_DATE [-b ANSI_DATE]
+	deltadays.pl -a 20140513 [-b 20140621]
 
 Returns the number of days between the two argument dates. If only one date is provided the alternate 
 date is assumed to be today. The order of the dates is not important.
+
+If you wish to know the date in the future, or the past, from a given point in time, use -D as in the next example.
+	deltadays.pl -a"20150101" -D"+12"
+prints the date 12 days in the future from '20150101' which is '20150113'.
+Similarly
+	deltadays.pl -a"20150101" -D"-12"
+prints the date 12 days in the past from '20150101' which is '20141220'.
 
 Product Description:
 Perl script written by Andrew Nisbet for Edmonton Public Library, distributable by the enclosed license.
