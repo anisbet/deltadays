@@ -26,6 +26,8 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Sep 16 08:48:25 MDT 2014
 # Rev: 
+#          0.5 - Add new switch to give ANSII date 'n' days in future based on -a date. 
+#          0.4 - Added warning about '-a' usage. 
 #          0.3 - Fixed incorrect usage() information about switches. 
 #          0.2 - Used printf instead of sprintf. 
 #          0.1 - Initial release. 
@@ -38,9 +40,12 @@ use warnings;
 use vars qw/ %opt /;
 use Getopt::Std;
 use Time::Local;
+use POSIX qw(strftime);
 
-my $VERSION         = qq{0.4};
+my $VERSION         = qq{0.5};
 my $SECONDS_PER_DAY = 60 * 60 * 24;
+my $PAST_FUTURE     = "future";
+my $PF_DAYS_COUNT   = 0; # The number of days in the past or future if -D selected.
 #
 # Message about this program and how to use it.
 #
@@ -55,6 +60,7 @@ The order of the dates is imaterial by way of 'abs(date_two - date_one)' which
 will provide '1' as a result if you asked how many days ago was tomorrow or $0 -a[tomorrow].
 
  -a: First date (required).
+ -D<+/-n>: Reports the date 'n' days from now (+), or in the past (-) in ANSI format (yyyyMMdd).
  -b: Second date (optional).
  -d: Debug messages printed to STDERR.
  -x: This (help) message.
@@ -64,6 +70,8 @@ example: $0 -a 20140513 -b 20140621
   Computes the number of days between May 13, 2014 and June 21, 2014.
 example: $0 -a"20270101"
   produces a negative date that is the number of days from today to January 1, 2027.
+example: $0 -a"20141231" -D+26
+  prints the date 26 days in the future from 20141231.
 Version: $VERSION
 EOF
     exit;
@@ -74,13 +82,41 @@ EOF
 # return: 
 sub init
 {
-    my $opt_string = 'a:b:dx';
+    my $opt_string = 'a:b:dD:x';
     getopts( "$opt_string", \%opt ) or usage();
     usage() if ( $opt{'x'} );
 	if ( ! defined $opt{'a'} )
 	{
 		print STDERR "**Error: you must provide a start date with '-a' in YYYYMMDD format.\n";
 		usage();
+	}
+	if ( $opt{'D'} )
+	{
+		if ( $opt{'D'} =~ m/^\-/ )
+		{
+			# Days can come in form of days from now (+) or days past (-), so lets check if properly prefixed.
+			$PAST_FUTURE = 'past';
+			$PF_DAYS_COUNT = $';
+			print STDERR "'-D' set to past " if ( $opt{'d'} );
+		}
+		elsif ( $opt{'D'} =~ m/^\+/ )
+		{
+			# Days can come in form of days from now (+) or days past (-), so lets check if properly prefixed.
+			$PAST_FUTURE = 'future';
+			$PF_DAYS_COUNT = $';
+			print STDERR "'-D' set to future " if ( $opt{'d'} );
+		}
+		else
+		{
+			print STDERR "**Error: -D requires '+' for future date, or '-' for days in past.\n";
+			usage();
+		}
+		if ( $PF_DAYS_COUNT !~ m/\d{1,}/ )
+		{
+			print STDERR "**Error: you must provide an integer number of days with '-D'.\n";
+			usage();
+		}
+		print STDERR " := $PF_DAYS_COUNT.\n" if ( $opt{'d'} );
 	}
 }
 
@@ -106,12 +142,26 @@ sub parseDate
 	}
 	print STDERR "**Error: invalid date format.\n";
 	usage();
-	return -1;
 }
 
 init();
 
 my ( $firstDate, $secondDate );
+
+if ( $opt{'D'} )
+{
+	$firstDate  = parseDate( $opt{'a'} );
+	if ( $PAST_FUTURE eq 'future' )
+	{
+		$secondDate = $firstDate + $PF_DAYS_COUNT * $SECONDS_PER_DAY;
+	}
+	else
+	{
+		$secondDate = $firstDate - $PF_DAYS_COUNT * $SECONDS_PER_DAY;
+	}
+	print strftime( "%Y%m%d", localtime( $secondDate ) ) . "\n";
+	exit;
+}
 
 if ( $opt{'b'} )
 {
